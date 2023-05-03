@@ -6,7 +6,7 @@ description = "Algorithms to generate smooth numbers"
 license = "MIT" # https://spdx.org/licenses/
 repository = "https://github.com/FedericoStra/smooth-numbers"
 categories = ["algorithms", "mathematics"] # https://crates.io/category_slugs
-keywords = ["Pratt sequence", "Shellsort", "smooth numbers", "3-smooth", "A003586"]
+keywords = ["Pratt", "sequence", "smooth-numbers", "3-smooth", "A003586"]
 edition = "2021"
 
 [package.metadata.docs.rs]
