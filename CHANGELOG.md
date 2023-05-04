@@ -16,6 +16,8 @@ and this project adheres to [Semantic Versioning](https://semver.org).
   than the *k*-th prime, now it generates numbers whose prime factors are less
   than or equal to *k*, in accordance with the definition of *k*-smooth numbers.
 
+- Internal refactor to reduce code duplication.
+
 ## [0.3.1] - 2023-05-04
 
 ### Fixed

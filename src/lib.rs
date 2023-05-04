@@ -127,24 +127,8 @@ pub fn smooth(k: usize, n: usize) -> Vec<u64> {
         .take_while(|&p| p <= k)
         .map(|p| p as u64)
         .collect();
-    let num_primes = primes.len();
-    let mut indices: Vec<usize> = vec![0; num_primes];
-    let mut v = Vec::with_capacity(n);
-    v.push(1);
 
-    for _ in 1..n {
-        let i = (0..num_primes)
-            .min_by_key(|&j| primes[j] * v[indices[j]])
-            .expect("cannot find next index");
-        let new = primes[i] * v[indices[i]];
-        v.push(new);
-        for j in 0..num_primes {
-            if primes[j] * v[indices[j]] == new {
-                indices[j] += 1;
-            }
-        }
-    }
-    v
+    with_primes(&primes, n)
 }
 
 /** Generates the first `n` smooth numbers whose prime factors are among `primes`.
