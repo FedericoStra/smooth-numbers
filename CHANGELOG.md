@@ -10,7 +10,10 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ### Added
 
-- Added function `with_primes` to generate smooth numbers from an arbitrary set or primes.
+- Added function `with_primes` to generate smooth numbers from an arbitrary
+  set or primes.
+- Added benchmark to compare computing 3-smooth numbers with `pratt(n)` and
+  `with_primes(&[2,3], n)`.
 
 ## [0.2.1] - 2023-05-04
 

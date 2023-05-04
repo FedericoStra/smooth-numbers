@@ -9,9 +9,19 @@ categories = ["algorithms", "mathematics"] # https://crates.io/category_slugs
 keywords = ["Pratt", "sequence", "smooth-numbers", "3-smooth", "A003586"]
 edition = "2021"
 
+[dependencies]
+primal = "0.3.2"
+
+[dev-dependencies]
+criterion = { version = "0.4.0", features = ["html_reports"] }
+
+[lib]
+bench = false
+
+[[bench]]
+name = "bench"
+harness = false
+
 [package.metadata.docs.rs]
 rustdoc-args = ["--cfg", "docsrs"]
 all-features = true
-
-[dependencies]
-primal = "0.3.2"
