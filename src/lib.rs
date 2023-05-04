@@ -1,17 +1,27 @@
-/*! Algorithms to generate [smooth numbers](https://mathworld.wolfram.com/SmoothNumber.html).
+/*! Algorithms to generate smooth numbers.
+
+See the definition of *smooth number* on
+[Wikipedia](https://en.wikipedia.org/wiki/Smooth_number) and
+[MathWorld](https://mathworld.wolfram.com/SmoothNumber.html).
 
 # Examples
 
-Generate the first `10` numbers of the form `2^j * 3^j`:
+Generate the first 10 3-smooth numbers, i.e. numbers of the form `2^i * 3^j`:
 ```
-use smooth_numbers::pratt;
-assert_eq!(pratt(10), [1, 2, 3, 4, 6, 8, 9, 12, 16, 18]);
+use smooth_numbers::smooth;
+assert_eq!(smooth(3, 10), [1, 2, 3, 4, 6, 8, 9, 12, 16, 18]);
 ```
 
-Generate the first `10` numbers of the form `2^j * 3^j * 5^k`:
+Generate the first 10 5-smooth numbers, i.e. numbers of the form `2^i * 3^j * 5^k`:
 ```
 use smooth_numbers::smooth;
 assert_eq!(smooth(5, 10), [1, 2, 3, 4, 5, 6, 8, 9, 10, 12]);
+```
+
+Generate the first 10 numbers of the form `2^i * 5^j`:
+```
+use smooth_numbers::with_primes;
+assert_eq!(with_primes(&[2, 5], 10), [1, 2, 4, 5, 8, 10, 16, 20, 25, 32]);
 ```
 */
 
