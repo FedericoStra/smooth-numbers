@@ -16,7 +16,7 @@ fn bench_3_smooth(c: &mut Criterion) {
         group.bench_with_input(BenchmarkId::new("pratt", n), &n, |b, &n| {
             b.iter(|| pratt(n))
         });
-        group.bench_with_input(BenchmarkId::new("smooth", n), &(2, n), |b, &(k, n)| {
+        group.bench_with_input(BenchmarkId::new("smooth", n), &(3, n), |b, &(k, n)| {
             b.iter(|| smooth(k, n))
         });
         group.bench_with_input(

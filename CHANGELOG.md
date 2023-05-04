@@ -8,6 +8,14 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 <!-- next-header -->
 ## [Unreleased]
 
+### Changed
+
+- ⚠️ Changed the meaning of `k` in `smooth(k, n)`.
+  
+  Previously `smooth(k, n)` generated numbers whose prime factors were smaller
+  than the *k*-th prime, now it generates numbers whose prime factors are less
+  than or equal to *k*, in accordance with the definition of *k*-smooth numbers.
+
 ## [0.3.1] - 2023-05-04
 
 ### Fixed

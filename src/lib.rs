@@ -11,7 +11,7 @@ assert_eq!(pratt(10), [1, 2, 3, 4, 6, 8, 9, 12, 16, 18]);
 Generate the first `10` numbers of the form `2^j * 3^j * 5^k`:
 ```
 use smooth_numbers::smooth;
-assert_eq!(smooth(3, 10), [1, 2, 3, 4, 5, 6, 8, 9, 10, 12]);
+assert_eq!(smooth(5, 10), [1, 2, 3, 4, 5, 6, 8, 9, 10, 12]);
 ```
 */
 
@@ -25,7 +25,7 @@ they are indexed in OEIS as [A003586](https://oeis.org/A003586).
 
 They provide the best-known sequence of gaps for [Shellsort] (best worst-case time complexity).
 
-[`pratt`]`(n)` is equivalent to [`smooth`]`(2, n)`, but faster.
+[`pratt`]`(n)` is equivalent to [`smooth`]`(3, n)`, but faster.
 
 [3-smooth numbers]: https://mathworld.wolfram.com/SmoothNumber.html
 [Shellsort]: https://en.wikipedia.org/wiki/Shellsort#Gap_sequences
@@ -63,12 +63,16 @@ pub fn pratt(n: usize) -> Vec<u64> {
     v
 }
 
-/** Generates the first `n` smooth numbers whose prime factors are smaller than
-or equal to the `k`-th prime number.
+/** Generates the first `n` `k`-smooth numbers, i.e. numbers whose prime factors
+  are smaller than or equal to `k`.
+
+See the definition of *smooth number* on
+[Wikipedia](https://en.wikipedia.org/wiki/Smooth_number) and
+[MathWorld](https://mathworld.wolfram.com/SmoothNumber.html).
 
 # Examples
 
-With `k == 0`, the numbers cannot have any prime factor,
+With `k < 2`, the numbers cannot have any prime factor,
 hence the only smooth number in this case is `1`.
 
 ```
@@ -76,24 +80,25 @@ hence the only smooth number in this case is `1`.
 assert_eq!(smooth(0, 0), []);
 assert_eq!(smooth(0, 1), [1]);
 assert_eq!(smooth(0, 10), [1]);
+assert_eq!(smooth(1, 10), [1]);
 ```
 
-With `k == 1`, the numbers can only have the prime factor `2`,
+With `k == 2`, the numbers can only have the prime factor `2`,
 hence we obtain the sequence of the powers of `2`.
 
 ```
 # use smooth_numbers::smooth;
-assert_eq!(smooth(1, 10), [1, 2, 4, 8, 16, 32, 64, 128, 256, 512]);
+assert_eq!(smooth(2, 10), [1, 2, 4, 8, 16, 32, 64, 128, 256, 512]);
 ```
 
-With `k == 2`, the numbers can only have the prime factors `2` and `3`,
+With `k == 3`, the numbers can only have the prime factors `2` and `3`,
 hence we obtain the sequence of the numbers of the form `2^i * 3^j`,
 also known as Pratt's sequence.
 See the [`pratt`] function for a specialized algorithm to generate this sequence.
 
 ```
 # use smooth_numbers::smooth;
-assert_eq!(smooth(2, 10), [1, 2, 3, 4, 6, 8, 9, 12, 16, 18]);
+assert_eq!(smooth(3, 10), [1, 2, 3, 4, 6, 8, 9, 12, 16, 18]);
 ```
 */
 pub fn smooth(k: usize, n: usize) -> Vec<u64> {
@@ -101,11 +106,11 @@ pub fn smooth(k: usize, n: usize) -> Vec<u64> {
         return Vec::new();
     }
 
-    if k == 0 {
+    if k < 2 {
         return vec![1];
     }
 
-    if k == 1 {
+    if k == 2 {
         let mut v = Vec::with_capacity(n);
         v.push(1);
         let mut x = 1;
@@ -116,24 +121,24 @@ pub fn smooth(k: usize, n: usize) -> Vec<u64> {
         return v;
     }
 
-    let sieve = primal::Sieve::new(primal::estimate_nth_prime(k as u64).1 as usize);
-    let kth_prime = sieve.nth_prime(k);
+    let sieve = primal::Sieve::new(k);
     let primes: Vec<u64> = sieve
         .primes_from(2)
-        .take_while(|&p| p <= kth_prime)
+        .take_while(|&p| p <= k)
         .map(|p| p as u64)
         .collect();
-    let mut indices: Vec<usize> = vec![0; k];
+    let n_primes = primes.len();
+    let mut indices: Vec<usize> = vec![0; n_primes];
     let mut v = Vec::with_capacity(n);
     v.push(1);
 
     for _ in 1..n {
-        let i = (0..k)
+        let i = (0..n_primes)
             .min_by_key(|&j| primes[j] * v[indices[j]])
             .expect("cannot find next index");
         let new = primes[i] * v[indices[i]];
         v.push(new);
-        for j in 0..k {
+        for j in 0..n_primes {
             if primes[j] * v[indices[j]] == new {
                 indices[j] += 1;
             }
@@ -245,34 +250,34 @@ mod tests {
     #[test]
     fn smooth_has_correct_length() {
         for n in [0, 1, 10, 64] {
-            assert_eq!(smooth(1, n).len(), n);
+            assert_eq!(smooth(2, n).len(), n);
         }
         for n in [0, 1, 10, 100] {
-            assert_eq!(smooth(2, n).len(), n);
             assert_eq!(smooth(3, n).len(), n);
+            assert_eq!(smooth(5, n).len(), n);
         }
     }
 
     #[test]
     fn smooth_has_correct_values() {
-        assert_eq!(smooth(1, 10), [1, 2, 4, 8, 16, 32, 64, 128, 256, 512]);
-        assert_eq!(smooth(2, 10), [1, 2, 3, 4, 6, 8, 9, 12, 16, 18]);
-        assert_eq!(smooth(2, 100).last(), Some(&93312));
+        assert_eq!(smooth(2, 10), [1, 2, 4, 8, 16, 32, 64, 128, 256, 512]);
+        assert_eq!(smooth(3, 10), [1, 2, 3, 4, 6, 8, 9, 12, 16, 18]);
+        assert_eq!(smooth(3, 100).last(), Some(&93312));
         // this is the largest possible
-        assert_eq!(smooth(2, 1343).last(), Some(&17748888853923495936));
-        assert_eq!(smooth(2, 1344).last(), Some(&17991041643939889152));
+        assert_eq!(smooth(3, 1343).last(), Some(&17748888853923495936));
+        assert_eq!(smooth(3, 1344).last(), Some(&17991041643939889152));
     }
 
     #[test]
     #[should_panic(expected = "attempt to multiply with overflow")]
     fn smooth_1_first_to_overflow() {
-        let _ = smooth(1, 65).last();
+        let _ = smooth(2, 65).last();
     }
 
     #[test]
     #[should_panic(expected = "attempt to multiply with overflow")]
     fn smooth_2_first_to_overflow() {
-        let _ = smooth(2, 1345).last();
+        let _ = smooth(3, 1345).last();
     }
 
     #[test]
