@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 <!-- next-header -->
 ## [Unreleased]
 
+### Added
+
+- Added example that prints the first 1344 3-smooth numbers
+  (all the 3-smooth numbers less than $2^64$, i.e. that fit in a `u64`).
+
 ## [0.2.0] - 2023-05-04
 
 ### Changed
