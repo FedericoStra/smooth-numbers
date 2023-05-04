@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 <!-- next-header -->
 ## [Unreleased]
 
+### Added
+
+- Added examples to print 3-, 5- and 7-smooth numbers.
+
 ## [0.4.0] - 2023-05-04
 
 ### Changed
