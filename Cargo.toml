@@ -1,6 +1,6 @@
 [package]
 name = "smooth-numbers"
-version = "0.2.0"
+version = "0.2.1"
 authors = ["Federico Stra <stra.federico@gmail.com>"]
 description = "Algorithms to generate smooth numbers"
 license = "MIT" # https://spdx.org/licenses/
