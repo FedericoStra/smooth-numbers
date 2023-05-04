@@ -59,21 +59,6 @@ pub fn pratt(n: usize) -> Vec<u64> {
                 three += 1;
             }
         }
-        // if 2 * v[two] < 3 * v[three] {
-        //     let new = 2 * v[two];
-        //     v.push(new);
-        //     two += 1;
-        //     while 3 * v[three] <= new {
-        //         three += 1;
-        //     }
-        // } else {
-        //     let new = 3 * v[three];
-        //     v.push(new);
-        //     three += 1;
-        //     while 2 * v[two] <= new {
-        //         two += 1;
-        //     }
-        // }
     }
     v
 }
