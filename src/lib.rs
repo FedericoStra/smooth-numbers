@@ -42,21 +42,38 @@ pub fn pratt(n: usize) -> Vec<u64> {
     let mut three = 0;
 
     for _ in 1..n {
-        if 2 * v[two] < 3 * v[three] {
-            let new = 2 * v[two];
-            v.push(new);
-            two += 1;
-            while 3 * v[three] <= new {
-                three += 1;
-            }
-        } else {
-            let new = 3 * v[three];
-            v.push(new);
-            three += 1;
-            while 2 * v[two] <= new {
+        let times_two = 2 * v[two];
+        let times_three = 3 * v[three];
+        match (times_two).cmp(&times_three) {
+            std::cmp::Ordering::Less => {
+                v.push(times_two);
                 two += 1;
             }
+            std::cmp::Ordering::Equal => {
+                v.push(times_two);
+                two += 1;
+                three += 1;
+            }
+            std::cmp::Ordering::Greater => {
+                v.push(times_three);
+                three += 1;
+            }
         }
+        // if 2 * v[two] < 3 * v[three] {
+        //     let new = 2 * v[two];
+        //     v.push(new);
+        //     two += 1;
+        //     while 3 * v[three] <= new {
+        //         three += 1;
+        //     }
+        // } else {
+        //     let new = 3 * v[three];
+        //     v.push(new);
+        //     three += 1;
+        //     while 2 * v[two] <= new {
+        //         two += 1;
+        //     }
+        // }
     }
     v
 }
@@ -112,9 +129,6 @@ pub fn smooth(k: usize, n: usize) -> Vec<u64> {
             v.push(x);
         }
         return v;
-
-        // #[cfg(feature = "itertools")]
-        // return itertools::iterate(1, |&x| x * 2).take(n).collect();
     }
 
     let primes: Vec<u64> = primal::Primes::all().take(k).map(|p| p as u64).collect();
@@ -128,14 +142,8 @@ pub fn smooth(k: usize, n: usize) -> Vec<u64> {
             .expect("cannot find next index");
         let new = primes[i] * v[indices[i]];
         v.push(new);
-        for j in 0..i {
-            while primes[j] * v[indices[j]] <= new {
-                indices[j] += 1;
-            }
-        }
-        indices[i] += 1;
-        for j in i + 1..k {
-            while primes[j] * v[indices[j]] <= new {
+        for j in 0..k {
+            if primes[j] * v[indices[j]] == new {
                 indices[j] += 1;
             }
         }
@@ -160,13 +168,14 @@ mod tests {
         assert_eq!(pratt(100).last(), Some(&93312));
         // this is the largest possible
         assert_eq!(pratt(1343).last(), Some(&17748888853923495936));
+        assert_eq!(pratt(1344).last(), Some(&17991041643939889152));
     }
 
     #[test]
     #[should_panic(expected = "attempt to multiply with overflow")]
     // #[should_panic(expected = "index out of bounds")] // with `overflow-checks = false`
     fn pratt_first_to_overflow() {
-        let _ = pratt(1344).last();
+        let _ = pratt(1345).last();
     }
 
     #[test]
@@ -187,6 +196,7 @@ mod tests {
         assert_eq!(smooth(2, 100).last(), Some(&93312));
         // this is the largest possible
         assert_eq!(smooth(2, 1343).last(), Some(&17748888853923495936));
+        assert_eq!(smooth(2, 1344).last(), Some(&17991041643939889152));
     }
 
     #[test]
@@ -198,6 +208,6 @@ mod tests {
     #[test]
     #[should_panic(expected = "attempt to multiply with overflow")]
     fn smooth_2_first_to_overflow() {
-        let _ = smooth(2, 1344).last();
+        let _ = smooth(2, 1345).last();
     }
 }
