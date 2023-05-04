@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 <!-- next-header -->
 ## [Unreleased]
 
+## [0.2.0] - 2023-05-04
+
 ### Changed
 
 - Refined the implementation of `pratt` and `smooth` so that they do not
@@ -23,5 +25,6 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 - Initial implementation of `pratt` and `smooth`.
 
 <!-- next-url -->
-[Unreleased]: https://github.com/FedericoStra/smooth-numbers/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/FedericoStra/smooth-numbers/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/FedericoStra/smooth-numbers/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/FedericoStra/smooth-numbers/releases/tag/v0.1.0
