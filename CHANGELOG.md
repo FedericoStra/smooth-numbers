@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 <!-- next-header -->
 ## [Unreleased]
 
+### Fixed
+
+- Optimized the generation of primes in the function `smooth`, using
+  `primal::Sieve` instead of `primal::Primes`.
+
 ## [0.3.0] - 2023-05-04
 
 ### Added

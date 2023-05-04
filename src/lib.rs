@@ -116,7 +116,13 @@ pub fn smooth(k: usize, n: usize) -> Vec<u64> {
         return v;
     }
 
-    let primes: Vec<u64> = primal::Primes::all().take(k).map(|p| p as u64).collect();
+    let sieve = primal::Sieve::new(primal::estimate_nth_prime(k as u64).1 as usize);
+    let kth_prime = sieve.nth_prime(k);
+    let primes: Vec<u64> = sieve
+        .primes_from(2)
+        .take_while(|&p| p <= kth_prime)
+        .map(|p| p as u64)
+        .collect();
     let mut indices: Vec<usize> = vec![0; k];
     let mut v = Vec::with_capacity(n);
     v.push(1);
