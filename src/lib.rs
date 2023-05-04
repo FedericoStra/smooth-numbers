@@ -136,6 +136,79 @@ pub fn smooth(k: usize, n: usize) -> Vec<u64> {
     v
 }
 
+/** Generates the first `n` smooth numbers whose prime factors are among `primes`.
+
+# Examples
+
+If `primes` is empty, the numbers cannot have any prime factor,
+hence the only smooth number in this case is `1`.
+
+```
+# use smooth_numbers::with_primes;
+assert_eq!(with_primes(&[], 0), []);
+assert_eq!(with_primes(&[], 1), [1]);
+assert_eq!(with_primes(&[], 10), [1]);
+```
+
+If `primes` contains a single element, the numbers can only have the prime factor `primes[0]`,
+hence we obtain the sequence of the powers of `primes[0]`.
+
+```
+# use smooth_numbers::with_primes;
+assert_eq!(with_primes(&[2], 10), [1, 2, 4, 8, 16, 32, 64, 128, 256, 512]);
+```
+
+If `primes == &[2, 3]`, the numbers can only have the prime factors `2` and `3`,
+hence we obtain the sequence of the numbers of the form `2^i * 3^j`,
+also known as Pratt's sequence.
+See the [`pratt`] function for a specialized algorithm to generate this sequence.
+
+```
+# use smooth_numbers::with_primes;
+assert_eq!(with_primes(&[2, 3], 10), [1, 2, 3, 4, 6, 8, 9, 12, 16, 18]);
+```
+*/
+pub fn with_primes(primes: &[u64], n: usize) -> Vec<u64> {
+    if n == 0 {
+        return Vec::new();
+    }
+
+    let k = primes.len();
+
+    if k == 0 {
+        return vec![1];
+    }
+
+    if k == 1 {
+        let mut v = Vec::with_capacity(n);
+        v.push(1);
+        let mut x = 1;
+        for _ in 1..n {
+            x *= primes[0];
+            v.push(x);
+        }
+        return v;
+    }
+
+    let mut indices: Vec<usize> = vec![0; k];
+    let mut v = Vec::with_capacity(n);
+    v.push(1);
+
+    for _ in 1..n {
+        let i = (0..k)
+            .min_by_key(|&j| primes[j] * v[indices[j]])
+            .expect("cannot find next index");
+        let new = primes[i] * v[indices[i]];
+        v.push(new);
+        for j in 0..k {
+            if primes[j] * v[indices[j]] == new {
+                indices[j] += 1;
+            }
+        }
+    }
+    v
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -194,5 +267,47 @@ mod tests {
     #[should_panic(expected = "attempt to multiply with overflow")]
     fn smooth_2_first_to_overflow() {
         let _ = smooth(2, 1345).last();
+    }
+
+    #[test]
+    fn with_primes_has_correct_length() {
+        for n in [0, 1, 10, 64] {
+            assert_eq!(with_primes(&[2], n).len(), n);
+        }
+        for n in [0, 1, 10, 100] {
+            assert_eq!(with_primes(&[2, 3], n).len(), n);
+            assert_eq!(with_primes(&[2, 3, 5], n).len(), n);
+        }
+    }
+
+    #[test]
+    fn with_primes_has_correct_values() {
+        assert_eq!(
+            with_primes(&[2], 10),
+            [1, 2, 4, 8, 16, 32, 64, 128, 256, 512]
+        );
+        assert_eq!(with_primes(&[2, 3], 10), [1, 2, 3, 4, 6, 8, 9, 12, 16, 18]);
+        assert_eq!(with_primes(&[2, 3], 100).last(), Some(&93312));
+        // this is the largest possible
+        assert_eq!(
+            with_primes(&[2, 3], 1343).last(),
+            Some(&17748888853923495936)
+        );
+        assert_eq!(
+            with_primes(&[2, 3], 1344).last(),
+            Some(&17991041643939889152)
+        );
+    }
+
+    #[test]
+    #[should_panic(expected = "attempt to multiply with overflow")]
+    fn with_primes_1_first_to_overflow() {
+        let _ = with_primes(&[2], 65).last();
+    }
+
+    #[test]
+    #[should_panic(expected = "attempt to multiply with overflow")]
+    fn with_primes_2_first_to_overflow() {
+        let _ = with_primes(&[2, 3], 1345).last();
     }
 }

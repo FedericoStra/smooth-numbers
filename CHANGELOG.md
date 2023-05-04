@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 <!-- next-header -->
 ## [Unreleased]
 
+### Added
+
+- Added function `with_primes` to generate smooth numbers from an arbitrary set or primes.
+
 ## [0.2.1] - 2023-05-04
 
 ### Added
