@@ -127,18 +127,18 @@ pub fn smooth(k: usize, n: usize) -> Vec<u64> {
         .take_while(|&p| p <= k)
         .map(|p| p as u64)
         .collect();
-    let n_primes = primes.len();
-    let mut indices: Vec<usize> = vec![0; n_primes];
+    let num_primes = primes.len();
+    let mut indices: Vec<usize> = vec![0; num_primes];
     let mut v = Vec::with_capacity(n);
     v.push(1);
 
     for _ in 1..n {
-        let i = (0..n_primes)
+        let i = (0..num_primes)
             .min_by_key(|&j| primes[j] * v[indices[j]])
             .expect("cannot find next index");
         let new = primes[i] * v[indices[i]];
         v.push(new);
-        for j in 0..n_primes {
+        for j in 0..num_primes {
             if primes[j] * v[indices[j]] == new {
                 indices[j] += 1;
             }
@@ -184,13 +184,13 @@ pub fn with_primes(primes: &[u64], n: usize) -> Vec<u64> {
         return Vec::new();
     }
 
-    let k = primes.len();
+    let num_primes = primes.len();
 
-    if k == 0 {
+    if num_primes == 0 {
         return vec![1];
     }
 
-    if k == 1 {
+    if num_primes == 1 {
         let mut v = Vec::with_capacity(n);
         v.push(1);
         let mut x = 1;
@@ -201,17 +201,17 @@ pub fn with_primes(primes: &[u64], n: usize) -> Vec<u64> {
         return v;
     }
 
-    let mut indices: Vec<usize> = vec![0; k];
+    let mut indices: Vec<usize> = vec![0; num_primes];
     let mut v = Vec::with_capacity(n);
     v.push(1);
 
     for _ in 1..n {
-        let i = (0..k)
+        let i = (0..num_primes)
             .min_by_key(|&j| primes[j] * v[indices[j]])
             .expect("cannot find next index");
         let new = primes[i] * v[indices[i]];
         v.push(new);
-        for j in 0..k {
+        for j in 0..num_primes {
             if primes[j] * v[indices[j]] == new {
                 indices[j] += 1;
             }
