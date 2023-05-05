@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 <!-- next-header -->
 ## [Unreleased]
 
+## [0.4.2] - 2023-05-05
+
 ### Changed
 
 - Optimized the code for `with_primes`.
@@ -71,7 +73,8 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 - Initial implementation of `pratt` and `smooth`.
 
 <!-- next-url -->
-[Unreleased]: https://github.com/FedericoStra/smooth-numbers/compare/v0.4.1...HEAD
+[Unreleased]: https://github.com/FedericoStra/smooth-numbers/compare/v0.4.2...HEAD
+[0.4.2]: https://github.com/FedericoStra/smooth-numbers/compare/v0.4.1...v0.4.2
 [0.4.1]: https://github.com/FedericoStra/smooth-numbers/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/FedericoStra/smooth-numbers/compare/v0.3.1...v0.4.0
 [0.3.1]: https://github.com/FedericoStra/smooth-numbers/compare/v0.3.0...v0.3.1
