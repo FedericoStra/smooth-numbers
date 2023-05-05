@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ### Changed
 
+- Optimized the code for `with_primes`.
 - Improved documentation.
 
 ## [0.4.1] - 2023-05-04

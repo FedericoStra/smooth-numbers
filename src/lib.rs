@@ -200,10 +200,12 @@ pub fn with_primes(primes: &[u64], n: usize) -> Vec<u64> {
     v.push(1);
 
     for _ in 1..n {
-        let i = (0..num_primes)
-            .min_by_key(|&j| primes[j] * v[indices[j]])
-            .expect("cannot find next index");
-        let new = primes[i] * v[indices[i]];
+        let new = primes
+            .iter()
+            .zip(&indices)
+            .map(|(p, &j)| p * v[j])
+            .min()
+            .expect("cannot find next smooth number");
         v.push(new);
         for j in 0..num_primes {
             if primes[j] * v[indices[j]] == new {
